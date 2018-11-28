@@ -194,7 +194,24 @@ namespace Logic
             }
             else
             {
-                throw new NotImplementedException();
+                heuristic = 0;
+
+                for(int i = 0; i < width; i++)
+                {
+                    for(int j = 0; j < length; j++)
+                    {
+                        if(arr[i,j] != i*width+j)
+                        {
+                            int ii = arr[i, j] / width;
+                            int jj = arr[i, j] % width;
+
+                            heuristic += Math.Abs(i - ii);
+                            heuristic += Math.Abs(j - jj);
+                        }
+                    }
+                }
+
+                heuristic += depth;
             }
         }
 
