@@ -4,31 +4,31 @@ using System.Linq;
 
 namespace Algorithms
 {
-    public class BreadthFirstSearch : Solution
+    public class AAsteriskSearch : Solution
     {
-        public BreadthFirstSearch(Fifteen _state, string _searchOrder)
+        public AAsteriskSearch(Fifteen _state, string _heuristic)
         {
             state = _state;
-            strategyInfo = _searchOrder;
+            strategyInfo = _heuristic;
 
             maxDepth = 0;
         }
 
         public override string Resolve()
         {
-            Queue<Fifteen> notVisited = new Queue<Fifteen>();
-            Queue<Fifteen> visited = new Queue<Fifteen>();
+            List<Fifteen> visited = new List<Fifteen>();
+            List<Fifteen> notVisited = new List<Fifteen>();
 
             string result = "";
 
             bool finished = false;
 
-            notVisited.Enqueue(state);
+            notVisited.Add(state);
 
             while(notVisited.Count > 0)
             {
-                Fifteen current = notVisited.Dequeue();
-                visited.Enqueue(current);
+                Fifteen current = notVisited.First();
+                notVisited.Remove(current);
 
                 if (current.Depth > maxDepth) maxDepth = current.Depth;
 
@@ -39,12 +39,20 @@ namespace Algorithms
                     break;
                 }
 
-                current.CreateNextFifteens(strategyInfo);
+                visited.Add(current);
+                current.CreateNextFifteens("LRUD");
 
-                foreach(Fifteen element in current.Next)
+                foreach(Fifteen item in current.Next)
                 {
-                    if (!CheckRepetition(element, notVisited.Concat(visited))) notVisited.Enqueue(element);
+                    if (!CheckRepetition(item, visited))
+                    {
+                        item.CountHeuristic(strategyInfo);
+                        notVisited.Add(item);
+                    }
+
                 }
+
+                notVisited.Sort();
             }
 
             visitedFifteens = visited.Count + notVisited.Count;
@@ -55,9 +63,9 @@ namespace Algorithms
 
         public bool CheckRepetition(Fifteen _state, IEnumerable<Fifteen> _states)
         {
-            foreach(Fifteen element in _states)
+            foreach (Fifteen element in _states)
             {
-                if(element.CheckSimilarity(_state)) return true;
+                if (element.CheckSimilarity(_state)) return true;
             }
             return false;
         }

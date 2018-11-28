@@ -1,8 +1,4 @@
-﻿using Analytics;
-using Logic;
-using Outputs;
-using System;
-using System.Threading;
+﻿using Logic;
 
 namespace ConsoleProj
 {

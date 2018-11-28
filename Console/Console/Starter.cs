@@ -8,11 +8,11 @@ namespace Logic
     class Starter
     {
         #region ATTRIBUTES
-        private string strategy;
-        private string strategyInfo;
-        private string fifteenFile;
-        private string resultFile;
-        private string metaDataFile;
+        private readonly string strategy;
+        private readonly string strategyInfo;
+        private readonly string fifteenFile;
+        private readonly string resultFile;
+        private readonly string metaDataFile;
 
         private ReaderWriter RW;
         private Fifteen FF;
@@ -22,7 +22,6 @@ namespace Logic
         private string result;
         #endregion // ATTRIBUTES
 
-        #region CONSTRUCTOR
         public Starter(string[] _args)
         {
             if (_args.Length != 5)
@@ -39,7 +38,6 @@ namespace Logic
             RW = new ReaderWriter();
             CC = new Clock();
         }
-        #endregion // CONSTRUCTOR
 
         public void Start()
         {
@@ -54,7 +52,7 @@ namespace Logic
                     SS = new DepthFirstSearch(FF, strategyInfo);
                     break;
                 case "astr":
-
+                    SS = new AAsteriskSearch(FF, strategyInfo);
                     break;
             }
 

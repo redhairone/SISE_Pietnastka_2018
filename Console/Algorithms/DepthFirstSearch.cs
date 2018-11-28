@@ -1,28 +1,20 @@
 ﻿using Logic;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithms
 {
     public class DepthFirstSearch : Solution
     {
-        #region ATTRIBUTES
-        private int depthLimit;
-        #endregion //ATTRIBUTES
+        private readonly int depthLimit;
 
-        #region CONSTRUCTORS
         public DepthFirstSearch(Fifteen _state, string _searchOrder)
         {
             state = _state;
-            searchOrder = _searchOrder;
+            strategyInfo = _searchOrder;
             maxDepth = 0;
 
             depthLimit = 20;
         }
-        #endregion //CONSTRUCTORS
 
         public override string Resolve()
         {
@@ -57,7 +49,7 @@ namespace Algorithms
                 }
 
                 visited.Add(current, current);
-                current.CreateNextFifteens(searchOrder);
+                current.CreateNextFifteens(strategyInfo);
 
                 List<Fifteen> nextFifteens = current.Next;
                 nextFifteens.Reverse();

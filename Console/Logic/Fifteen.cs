@@ -4,22 +4,23 @@ using System.Drawing;
 
 namespace Logic
 {
-    public class Fifteen
+    public class Fifteen : IComparable<Fifteen>
     {
         #region Attributes
-        private int[,] arr;
-        private int length;
-        private int width;
+        private readonly int[,] arr;
+        private readonly int length;
+        private readonly int width;
 
         private Point empty;
+        private int heuristic;
 
         private char direction;
         private string history;
 
-        private int depth;
+        private readonly int depth;
 
         private Fifteen previous;
-        private List<Fifteen> next;
+        private readonly List<Fifteen> next;
         #endregion // Attributes
         
         #region Accessors
@@ -32,6 +33,7 @@ namespace Logic
         public List<Fifteen> Next { get => this.next; }
         public int Depth { get => this.depth; }
         public char Direction { get => this.direction; set => direction = value; }
+        public int Heuristic { get => this.heuristic; set => heuristic = value; }
         #endregion //Accessors
         
         #region Constructors
@@ -171,6 +173,36 @@ namespace Logic
                 }
                 Console.Write('\n');
             }
+        }
+
+        public void CountHeuristic(string _strategyInfo)
+        {
+            if(_strategyInfo == "hamm")
+            {
+                heuristic = 0;
+
+                int counter = 1;
+                for(int i = 0; i < width; i++)
+                {
+                    for(int j = 0; j < length; j++)
+                    {
+                        if (arr[i, j] != counter) heuristic++;
+                    }
+                }
+
+                heuristic += depth;
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int CompareTo(Fifteen other)
+        {
+            if (this.heuristic > other.Heuristic) return 1;
+            else if (this.heuristic < other.Heuristic) return -1;
+            else return 0;
         }
     }
 }
