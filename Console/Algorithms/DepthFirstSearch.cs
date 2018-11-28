@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Algorithms
 {
-    public class Class1
+    public class DepthFirstSearch : Solution
     {
+        public override string Resolve()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

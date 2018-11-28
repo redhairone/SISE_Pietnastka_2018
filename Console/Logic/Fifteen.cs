@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Logic
@@ -6,32 +7,41 @@ namespace Logic
     public class Fifteen
     {
         #region Attributes
-        private byte[,] arr;
+        private int[,] arr;
+        private int length;
+        private int width;
+
         private Point empty;
 
-        private Move direction;
+        private char direction;
         private string history;
 
         private int depth;
 
         private Fifteen previous;
+        private List<Fifteen> next;
         #endregion // Attributes
-
         
         #region Accessors
-        public byte[,] Arr { get => this.arr; }
+        public int[,] Arr { get => this.arr; }
+        public int Width { get => this.width; }
+        public int Length { get => this.length; }
         public Point Empty { get => this.empty; set => this.empty = value; }
         public string History { get => this.history; set => this.history = value; }
         public Fifteen Previous { get => this.previous; set => this.previous = value; }
+        public List<Fifteen> Next { get => this.next; }
         public int Depth { get => this.depth; }
-        public Move Direction { get => this.direction; set => direction = value; }
+        public char Direction { get => this.direction; set => direction = value; }
         #endregion //Accessors
         
         #region Constructors
 
-        public Fifteen(byte[,] _arr, Point _empty)
+        public Fifteen(int[,] _arr, int _width, int _length, Point _empty)
         {
-            this.arr = new byte[4,4];
+            this.width = _width;
+            this.length = _length;
+            this.arr = new int[_width,_length];
+            this.next = new List<Fifteen>();
             this.empty = _empty;
             this.history = "";
             this.previous = null;
@@ -42,64 +52,61 @@ namespace Logic
 
         public Fifteen(Fifteen _oldOne)
         {
-            this.arr = new byte[4, 4];
+            this.arr = new int[_oldOne.Width, _oldOne.Length];
+            this.width = _oldOne.Width;
+            this.length = _oldOne.Length;
+            this.next = new List<Fifteen>();
             this.empty = _oldOne.Empty;
             this.history = _oldOne.History;
             this.previous = _oldOne;
             this.depth = _oldOne.Depth + 1;
 
-            Array.Copy(_oldOne.Arr, this.arr, _oldOne.Arr.Length);
+            this.arr = _oldOne.Arr.Clone() as int[,];
         }
         #endregion //Constructors
 
-        public Fifteen Move(Move _direction)
+        public Fifteen Move(char _direction)
         {
             Fifteen newOne = new Fifteen(this);
             newOne.History += _direction;
             newOne.Direction = _direction;
-            Point temp;
+            Point temp = newOne.Empty;
 
             switch(_direction)
             {
-                case Logic.Move.Up:
-                    Tools.Swap(ref newOne.Arr[newOne.Empty.X, newOne.Empty.Y], ref newOne.Arr[newOne.Empty.X, newOne.Empty.Y - 1]);
-                    temp = newOne.Empty;
-                    temp.Y--;
-                    newOne.Empty = temp;
-                    break;
-
-                case Logic.Move.Down:
-                    Tools.Swap(ref newOne.Arr[newOne.Empty.X, newOne.Empty.Y], ref newOne.Arr[newOne.Empty.X, newOne.Empty.Y + 1]);
-                    temp = newOne.Empty;
-                    temp.Y++;
-                    newOne.Empty = temp;
-                    break;
-
-                case Logic.Move.Left:
+                case 'U':
                     Tools.Swap(ref newOne.Arr[newOne.Empty.X, newOne.Empty.Y], ref newOne.Arr[newOne.Empty.X - 1, newOne.Empty.Y]);
-                    temp = newOne.Empty;
                     temp.X--;
-                    newOne.Empty = temp;
                     break;
 
-                case Logic.Move.Right:
+                case 'D':
                     Tools.Swap(ref newOne.Arr[newOne.Empty.X, newOne.Empty.Y], ref newOne.Arr[newOne.Empty.X + 1, newOne.Empty.Y]);
-                    temp = newOne.Empty;
                     temp.X++;
-                    newOne.Empty = temp;
+                    break;
+
+                case 'L':
+                    Tools.Swap(ref newOne.Arr[newOne.Empty.X, newOne.Empty.Y], ref newOne.Arr[newOne.Empty.X, newOne.Empty.Y - 1]);
+                    temp.Y--;
+                    break;
+
+                case 'R':
+                    Tools.Swap(ref newOne.Arr[newOne.Empty.X, newOne.Empty.Y], ref newOne.Arr[newOne.Empty.X, newOne.Empty.Y + 1]);
+                    temp.Y++;
                     break;
                 default:
                     break;
             }
+
+            newOne.Empty = temp;
             return newOne;
         }
 
-        public bool CheckMove(Move _direction)
+        public bool CheckMove(char _direction)
         {
-            if ((_direction == Logic.Move.Up && this.Empty.Y == 0) ||
-                (_direction == Logic.Move.Down && this.Empty.Y == 3) ||
-                (_direction == Logic.Move.Left && this.Empty.X == 0) ||
-                (_direction == Logic.Move.Right && this.Empty.X == 3)) return false;
+            if ((_direction == 'U' && this.Empty.X == 0) ||
+                (_direction == 'D' && this.Empty.X == width-1) ||
+                (_direction == 'L' && this.Empty.Y == 0) ||
+                (_direction == 'R' && this.Empty.Y == length-1)) return false;
             else return true;
         }
 
@@ -137,13 +144,33 @@ namespace Logic
             return true;
         }
 
-        public bool CheckBack(Move _direction)
+        public bool CheckBack(char _direction)
         {
-            if ((this.direction == Logic.Move.Up && _direction == Logic.Move.Down) ||
-                (this.direction == Logic.Move.Down && _direction == Logic.Move.Up) ||
-                (this.direction == Logic.Move.Left && _direction == Logic.Move.Right) ||
-                (this.direction == Logic.Move.Right && _direction == Logic.Move.Left)) return true;
+            if ((this.direction == 'U' && _direction == 'D') ||
+                (this.direction == 'D' && _direction == 'U') ||
+                (this.direction == 'L' && _direction == 'R') ||
+                (this.direction == 'R' && _direction == 'L')) return true;
             else return false;
+        }
+
+        public void GetNextFifteens(string _searchOrder)
+        {
+            foreach(char sign in _searchOrder)
+            {
+                if (CheckMove(sign) && !CheckBack(sign)) this.next.Add(this.Move(sign));
+            }
+        }
+
+        public void Show()
+        {
+            for(int i = 0; i < width; i ++)
+            {
+                for (int j = 0; j < length; j++)
+                {
+                    Console.Write(arr[i,j] + " ");
+                }
+                Console.Write('\n');
+            }
         }
     }
 }

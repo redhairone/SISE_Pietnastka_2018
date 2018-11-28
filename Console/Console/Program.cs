@@ -1,9 +1,6 @@
 ﻿using Logic;
+using Outputs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleProj
 {
@@ -11,7 +8,8 @@ namespace ConsoleProj
     {
         static void Main(string[] args)
         {
-
+            Starter S = new Starter(args);
+            S.Start();
         }
     }
 }

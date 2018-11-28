@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Logic
+﻿namespace Logic
 {
     class Tools
     {
@@ -12,7 +6,7 @@ namespace Logic
         {
             T temp = A;
             A = B;
-            B = A;
+            B = temp;
         }
     }
 }
