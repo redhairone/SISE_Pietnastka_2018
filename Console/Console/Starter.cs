@@ -1,4 +1,5 @@
 ﻿using Algorithms;
+using Analytics;
 using Outputs;
 using System;
 
@@ -16,6 +17,7 @@ namespace Logic
         private ReaderWriter RW;
         private Fifteen FF;
         private Solution SS;
+        private Clock CC;
 
         private string result;
         #endregion // ATTRIBUTES
@@ -35,6 +37,7 @@ namespace Logic
             metaDataFile = _args[4];
 
             RW = new ReaderWriter();
+            CC = new Clock();
         }
         #endregion // CONSTRUCTOR
 
@@ -55,9 +58,12 @@ namespace Logic
                     break;
             }
 
+            CC.Start();
             result = SS.Resolve();
+            CC.Stop();
 
             RW.WriteResult(resultFile, result);
+            RW.WriteMetaData(metaDataFile, result.Length, SS.VisitedFifteens, SS.ProcessedFifteens, SS.MaxDepth, CC.GetTime());
         }
     }
 }

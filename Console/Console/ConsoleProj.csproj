@@ -55,6 +55,10 @@
       <Project>{5de011f5-e5f7-41f4-b6b7-b72c41635300}</Project>
       <Name>Algorithms</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Analytics\Analytics.csproj">
+      <Project>{dea470cc-e6b2-4b55-8ae4-4a507eb596c5}</Project>
+      <Name>Analytics</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Logic\Logic.csproj">
       <Project>{d2189ece-293d-4e99-beb3-0aa30ff81c51}</Project>
       <Name>Logic</Name>

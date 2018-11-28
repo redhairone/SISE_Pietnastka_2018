@@ -44,5 +44,17 @@ namespace Outputs
         {
             File.WriteAllText(_fileName, _text);
         }
+
+        public void WriteMetaData(string _fileName, int _solutionLength, int _visitedAmount, int _processedAmount, int _maxDepth, string _timeElapsed)
+        {
+            StringBuilder SB = new StringBuilder();
+            SB.AppendLine(_solutionLength.ToString());
+            SB.AppendLine(_visitedAmount.ToString());
+            SB.AppendLine(_processedAmount.ToString());
+            SB.AppendLine(_maxDepth.ToString());
+            SB.AppendLine(_timeElapsed);
+
+            File.WriteAllText(_fileName, SB.ToString());
+        }
     }
 }
