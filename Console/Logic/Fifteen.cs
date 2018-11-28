@@ -153,7 +153,7 @@ namespace Logic
             else return false;
         }
 
-        public void GetNextFifteens(string _searchOrder)
+        public void CreateNextFifteens(string _searchOrder)
         {
             foreach(char sign in _searchOrder)
             {

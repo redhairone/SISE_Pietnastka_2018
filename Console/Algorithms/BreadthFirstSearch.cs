@@ -28,7 +28,6 @@ namespace Algorithms
             bool finished = false;
 
             notVisited.Enqueue(state);
-            int cc = 0;
 
             while(notVisited.Count > 0)
             {
@@ -44,15 +43,12 @@ namespace Algorithms
                     break;
                 }
 
-                current.GetNextFifteens(searchOrder);
+                current.CreateNextFifteens(searchOrder);
 
                 foreach(Fifteen element in current.Next)
                 {
                     if (!CheckRepetition(element, notVisited.Concat(visited))) notVisited.Enqueue(element);
                 }
-
-                Console.WriteLine("IM ALIVE!!! " + cc.ToString());
-                cc++;
             }
 
             visitedFifteens = visited.Count + notVisited.Count;

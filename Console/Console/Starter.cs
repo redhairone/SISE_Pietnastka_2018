@@ -48,7 +48,7 @@ namespace Logic
                     SS = new BreadthFirstSearch(FF, strategyInfo);
                     break;
                 case "dfs":
-                    SS = new DepthFirstSearch();
+                    SS = new DepthFirstSearch(FF, strategyInfo);
                     break;
                 case "astr":
 
