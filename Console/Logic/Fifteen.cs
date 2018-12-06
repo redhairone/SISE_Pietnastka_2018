@@ -186,7 +186,9 @@ namespace Logic
                 {
                     for(int j = 0; j < length; j++)
                     {
+                        if (arr[i, j] == 0) continue;
                         if (arr[i, j] != counter) heuristic++;
+                        counter++;
                     }
                 }
 
@@ -200,7 +202,8 @@ namespace Logic
                 {
                     for(int j = 0; j < length; j++)
                     {
-                        if(arr[i,j] != i*width+j)
+                        if (arr[i, j] == 0) continue;
+                        if(arr[i,j] != i*width+j+1)
                         {
                             int ii = arr[i, j] / width;
                             int jj = arr[i, j] % width;

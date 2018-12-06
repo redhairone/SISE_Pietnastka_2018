@@ -18,7 +18,7 @@ namespace Algorithms
 
         public override string Resolve()
         {
-            Dictionary<Fifteen, Fifteen> visited = new Dictionary<Fifteen, Fifteen>(new FifteenComparer());
+            Dictionary<Fifteen, Fifteen> visited = new Dictionary<Fifteen, Fifteen>();
             Stack<Fifteen> toVisit = new Stack<Fifteen>();
 
             string result = "";
@@ -42,12 +42,6 @@ namespace Algorithms
                     break;
                 }
 
-                if(visited.ContainsKey(current))
-                {
-                    if (current.Depth >= visited[current].Depth) continue;
-                    else visited.Remove(current);
-                }
-
                 visited.Add(current, current);
                 current.CreateNextFifteens(strategyInfo);
 
@@ -56,6 +50,7 @@ namespace Algorithms
 
                 foreach(Fifteen F in nextFifteens)
                 {
+                    if (visited.ContainsKey(F)) continue;
                     toVisit.Push(F);
                     visitedFifteens++;
                 }
